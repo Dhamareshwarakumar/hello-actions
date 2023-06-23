@@ -31,7 +31,9 @@ jobs:
 
                   comment: Hello world!
                   working-directory: /home/ubuntu/hello-actions/
-                  command: /bin/sh ./deploy.sh
+                  command: git pull origin main
+                  command: npm install
+                  command: npm run build
 
             - name: Get the outputs
               run: echo "The Command id is ${{ steps.ssm.outputs.command-id }}"
