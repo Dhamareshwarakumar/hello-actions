@@ -1,3 +1,3 @@
 npm install
 npm run build
-pm2 restart all
+npx pm2 start
