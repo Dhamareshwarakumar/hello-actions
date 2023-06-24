@@ -13,4 +13,4 @@ jobs:
               with:
                   ref: test
             - name: Build
-              run: /bin/sh build.sh
+              run: /bin/sh deploy.sh
