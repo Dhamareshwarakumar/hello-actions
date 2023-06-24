@@ -1,0 +1,17 @@
+name: Check Build status
+
+on:
+    pull_request:
+        branches: [main]
+
+jobs:
+    build:
+        runs-on: ubuntu-22.04
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Install Dependencies
+              run: npm install
+            - name: Build
+              run: npm run build
