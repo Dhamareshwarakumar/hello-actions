@@ -16,46 +16,24 @@ jobs:
             - name: Build
               run: npm run build
     Deploy:
-        runs-on: ubuntu-22.04
         needs: build
+        runs-on: ubuntu-22.04
         steps:
             - uses: actions/checkout@v2
+            - name: EC2 Deploy
+              env:
+                  PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+                  HOSTNAME: ${{ secrets.HOSTNAME }}
+                  USER_NAME: ${{ secrets.USER_NAME }}
 
-            - name: AWS SSM Send-Command
-              uses: peterkimzz/aws-ssm-send-command@master
-              with:
-                  aws-region: ${{ secrets.AWS_REGION }}
-                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  instance-ids: ${{ secrets.INSTANCE_ID }}
+              run: |
+                  echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+                  ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
 
-                  comment: Hello world!
-                  working-directory: /home/ubuntu/hello-actions/
-                  command: /bin/sh ./deploy.sh
-
-            - name: Get the outputs
-              run: echo "The Command id is ${{ steps.ssm.outputs.command-id }}"
-#
-#
-#
-# runs-on: ubuntu-22.04
-#         needs: build
-#         steps:
-#             - uses: actions/checkout@v2
-#             - name: EC2 Deploy
-#               env:
-#                   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-#                   HOSTNAME: ${{ secrets.HOSTNAME }}
-#                   USER_NAME: ${{ secrets.USER_NAME }}
-
-#               run: |
-#                 echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-#                 ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-
-#                 cd /home/ubuntu/ &&
-#                 git checkout main &&
-#                 git fetch --all &&
-#                 git reset --hard origin/master &&
-#                 git pull origin master &&
-#                 docker-compose -f docker-compose.prod.yml up -d --build
-#               '
+                    cd /home/ubuntu/hello-actions &&
+                    git checkout main &&
+                    git fetch --all &&
+                    git pull origin main &&
+                    sh build.sh &&
+                    echo "Deployed Successfully"
+                  '
