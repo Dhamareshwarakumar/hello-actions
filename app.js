@@ -5,7 +5,8 @@ const App = () => {
     return (
         <div style={{ backgroundColor: '#181818', minHeight: "100vh", color: "#fff" }}>
             <h1 style={{ textAlign: 'center' }}>Hello Github Actions!!!</h1>
-            <p>updated123....</p>
+            <p>Changes from test branch....</p>
+            <p>Testing Branch rules</p>
         </div>
     );
 };

@@ -1,17 +1,26 @@
-name: Check Build status
+name: Build Check on PR
 
 on:
     pull_request:
-        branches: [main]
+        branches: [main, test]
 
 jobs:
-    build:
+    build-test:
         runs-on: ubuntu-22.04
-
         steps:
-            - uses: actions/checkout@v2
-
-            - name: Install Dependencies
-              run: npm install
+            - name: Checkout test
+              uses: actions/checkout@v3
+              with:
+                  ref: test
             - name: Build
-              run: npm run build
+              run: /bin/sh deploy.sh
+
+    build-main:
+        runs-on: ubuntu-22.04
+        steps:
+            - name: Checkout main
+              uses: actions/checkout@v3
+              with:
+                  ref: main
+            - name: Build
+              run: /bin/sh deploy.sh

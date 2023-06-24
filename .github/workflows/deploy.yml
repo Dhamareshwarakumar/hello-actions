@@ -2,7 +2,7 @@ name: Deploy to EC2 usinf AWS SSM Send-Command
 
 on:
     push:
-        branches: [main]
+        branches: [main, test]
 
 jobs:
     build:
