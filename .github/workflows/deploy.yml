@@ -1,39 +1,39 @@
-# name: Deploy to EC2 usinf AWS SSM Send-Command
+name: Deploy to EC2 usinf AWS SSM Send-Command
 
-# on:
-#     push:
-#         branches: [main]
+on:
+    push:
+        branches: [main, test]
 
-# jobs:
-#     build:
-#         runs-on: ubuntu-22.04
+jobs:
+    build:
+        runs-on: ubuntu-22.04
 
-#         steps:
-#             - uses: actions/checkout@v2
+        steps:
+            - uses: actions/checkout@v2
 
-#             - name: Install Dependencies
-#               run: npm install
-#             - name: Build
-#               run: npm run build
-#     Deploy:
-#         needs: build
-#         runs-on: ubuntu-22.04
-#         steps:
-#             - uses: actions/checkout@v2
-#             - name: EC2 Deploy
-#               env:
-#                   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-#                   HOSTNAME: ${{ secrets.HOSTNAME }}
-#                   USER_NAME: ${{ secrets.USER_NAME }}
+            - name: Install Dependencies
+              run: npm install
+            - name: Build
+              run: npm run build
+    Deploy:
+        needs: build
+        runs-on: ubuntu-22.04
+        steps:
+            - uses: actions/checkout@v2
+            - name: EC2 Deploy
+              env:
+                  PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+                  HOSTNAME: ${{ secrets.HOSTNAME }}
+                  USER_NAME: ${{ secrets.USER_NAME }}
 
-#               run: |
-#                   echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-#                   ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+              run: |
+                  echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+                  ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
 
-#                     cd /home/ubuntu/hello-actions &&
-#                     git checkout main &&
-#                     git fetch --all &&
-#                     git pull origin main &&
-#                     sh /home/ubuntu/hello-actions/deploy.sh &&
-#                     echo "Deployed Successfully"
-#                   '
+                    cd /home/ubuntu/hello-actions &&
+                    git checkout main &&
+                    git fetch --all &&
+                    git pull origin main &&
+                    sh /home/ubuntu/hello-actions/deploy.sh &&
+                    echo "Deployed Successfully"
+                  '
