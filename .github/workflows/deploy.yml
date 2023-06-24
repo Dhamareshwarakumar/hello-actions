@@ -34,6 +34,6 @@ jobs:
                     git checkout main &&
                     git fetch --all &&
                     git pull origin main &&
-                    sh build.sh &&
+                    sh /home/ubuntu/hello-actions/deploy.sh &&
                     echo "Deployed Successfully"
                   '
