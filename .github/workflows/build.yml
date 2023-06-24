@@ -1,16 +1,26 @@
 name: Build Check on PR
 
 on:
-    pull_request:
+    push:
         branches: [main, test]
 
 jobs:
-    build:
+    build-test:
         runs-on: ubuntu-22.04
         steps:
             - name: Checkout test
               uses: actions/checkout@v3
               with:
                   ref: test
+            - name: Build
+              run: /bin/sh deploy.sh
+
+    build-main:
+        runs-on: ubuntu-22.04
+        steps:
+            - name: Checkout main
+              uses: actions/checkout@v3
+              with:
+                  ref: main
             - name: Build
               run: /bin/sh deploy.sh
